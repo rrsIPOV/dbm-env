@@ -26,13 +26,15 @@ def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() && targetDir != null) {
     appender("FULL_STACKTRACE", FileAppender) {
         file = "${targetDir}/stacktrace.log"
-        append = true
+        append = false
         encoder(PatternLayoutEncoder) {
-            pattern = "%level %logger - %msg%n"
+            pattern = "%level %logger - %m%n%wex"
         }
     }
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
-    root(ERROR, ['STDOUT', 'FULL_STACKTRACE'])
+    root(DEBUG, ['STDOUT', 'FULL_STACKTRACE'])
+    logger('org.hibernate.SQL', DEBUG )
+    logger('org.hibernate.type.descriptor.sql.BasicBinder', DEBUG )
 }
 else {
     root(ERROR, ['STDOUT'])

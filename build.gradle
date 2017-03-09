@@ -7,6 +7,7 @@ buildscript {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.11.6"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
+        classpath 'org.grails.plugins:database-migration:3.+'
     }
 }
 
@@ -46,6 +47,10 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+
+    // DBM Plugin:
+    compile 'org.grails.plugins:database-migration:3.+'
+    compile 'org.liquibase:liquibase-core:3.5.+'
 }
 
 bootRun {
@@ -57,4 +62,12 @@ bootRun {
 assets {
     minifyJs = true
     minifyCss = true
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'grails-app/migrations'
+        }
+    }
 }

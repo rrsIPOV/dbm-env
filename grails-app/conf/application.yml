@@ -95,14 +95,24 @@ dataSource:
     username: sa
     password:
 
+grails.plugin.databasemigration:
+    changelogLocation: 'grails-app/migrations'
+    changelogFileName: 'changelog.groovy'
+
 environments:
     development:
         dataSource:
-            dbCreate: create-drop
-            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            dbCreate: none
+            url: jdbc:h2:./devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            logSql: true
+        hibernate:
+            format_sql: true
+        grails.plugin.databasemigration:
+            updateOnStart: true
+            updateOnStartFileName: 'changelog.groovy'
     test:
         dataSource:
-            dbCreate: update
+            dbCreate: none
             url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
         dataSource:
@@ -126,3 +136,13 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+    # The production DB is not accessible via a direct connection
+    # In the real app, this env points to the production DB over an ssh tunnel
+    datatool:
+        dataSource:
+            dbCreate: none
+            url: jdbc:h2:./rdataDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            logSql: true
+        hibernate:
+            format_sql: true
